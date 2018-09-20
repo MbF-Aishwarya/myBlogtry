@@ -6,6 +6,7 @@ const ArticlesSchema = new Schema({
   title: String,
   body: String,
   author: String,
+  related: String,
 }, { timestamps: true });
 
 ArticlesSchema.methods.toJSON = function() {
@@ -14,6 +15,7 @@ ArticlesSchema.methods.toJSON = function() {
     title: this.title,
     body: this.body,
     author: this.author,
+    related: this.related,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };

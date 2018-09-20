@@ -21,6 +21,14 @@ router.post('/', (req, res, next) => {
     });
   }
 
+  if(!body.related) {
+    return res.status(422).json({
+      errors: {
+        related: 'is required',
+      },
+    });
+  }
+
   if(!body.body) {
     return res.status(422).json({
       errors: {
@@ -72,6 +80,10 @@ router.patch('/:id', (req, res, next) => {
 
   if(typeof body.body !== 'undefined') {
     req.article.body = body.body;
+  }
+
+  if(typeof body.related !== 'undefined') {
+    req.article.related = body.related;
   }
 
   return req.article.save()

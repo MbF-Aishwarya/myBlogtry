@@ -7,3 +7,45 @@ body, html {
   color: rgba(0,0,0,.75);
   font-family: 'Nunito';
 }
+.container{
+	max-width: 1200px; 	
+}
+
+img.bg{
+	min-height: 100%;
+	width: 100%;
+	position:fixed;
+	top: 0;
+    left: 0;
+    z-index: -1;
+}
+.content-bg{
+	background: rgba(252, 252, 252, 0.73);
+    padding: 60px 50px;
+    border-radius: 12px;
+}
+.textarea .form-control{
+	height:300px;
+}
+.blogContent{
+	height:300px !important; 
+}
+.form-control:focus{
+	border-color: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 0 0.2rem rgba(35, 35, 35, 0.25);
+}
+.card-header{
+	color:white;
+	background:black;
+	text-transform: uppercase;
+    font-weight: 800;
+}
+.blogCard{
+	display: flex;
+    flex-wrap: wrap;
+}
+.card{
+	width:510px;
+	display:inline-flex;
+	margin-right:20px;
+}
