@@ -5,6 +5,7 @@ const session = require('express-session');
 const cors = require('cors');
 const errorHandler = require('errorhandler');
 const mongoose = require('mongoose');
+const fileUpload = require('express-fileupload');
 
 mongoose.promise = global.Promise;
 
@@ -18,6 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'LightBlog', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
+app.use(fileUpload());
+app.use('/public', express.static(__dirname + '/public'));
 
 if(!isProduction) {
   app.use(errorHandler());
@@ -36,6 +39,23 @@ app.use((req, res, next) => {
   err.status = 404;
   next(err);
 });
+
+//image upload
+
+app.post('/', (req, res, next) => {
+  console.log(req);
+  let imageFile = req.files.file;
+
+  imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    res.json({file: `public/${req.body.filename}.jpg`});
+  });
+
+})
+
 
 if (!isProduction) {
   app.use((err, req, res) => {

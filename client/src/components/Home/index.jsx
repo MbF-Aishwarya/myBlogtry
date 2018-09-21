@@ -4,10 +4,14 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 
 import { Form } from '../../components/Article';
+import { Imgupload } from '../../components/Article';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      file:''
+    }
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -65,6 +69,7 @@ class Home extends React.Component {
                       {article.title}
                     </div>
                     <div className="card-body">
+                      {article.file} 
                       {article.body}
                       <p className="mt-5">Related to: {article.related}</p>
                       <p className="mt-5 text-muted"><b>{article.author}</b> {moment(new Date(article.createdAt)).fromNow()}</p>

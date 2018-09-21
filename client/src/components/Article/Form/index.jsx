@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
+import Imgupload  from '../ImgUpload';
 
 class Form extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Form extends React.Component {
         body: nextProps.articleToEdit.body,
         author: nextProps.articleToEdit.author,
         related: nextProps.articleToEdit.related,
+       file: nextProps.articleToEdit.file,
       });
     }
   }
@@ -42,34 +44,52 @@ class Form extends React.Component {
         file
       })
         .then((res) => onSubmit(res.data))
-        .then(() => this.setState({ title: '', body: '', author: '', related: '', file:'' }));
+        .then(() => this.setState({ title: '', body: '', author: '', related: '', file:''}));
     } else {
       return axios.patch(`http://localhost:8000/api/articles/${articleToEdit._id}`, {
         title,
         body,
         author,
-        related
+        related,
+        file
+        
       })
         .then((res) => onEdit(res.data))
-        .then(() => this.setState({ title: '', body: '', author: '', related: '' }));
+        .then(() => this.setState({ title: '', body: '', author: '', related: '', file:''}));
     }
   }
+
+ 
 
   handleChangeField(key, event) {
     this.setState({
       [key]: event.target.value,
     });
+
+     if (event.target.files && event.target.files[0]) {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                this.setState({image: e.target.result});
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        const data = new FormData();
+      data.append('file', this.uploadInput.files[0]);
   }
 
   render() {
     const { articleToEdit } = this.props;
-    const { title, body, author, related, file } = this.state;
+    const { title, body, author, related, file} = this.state;
 
     return (
       <div className="col-6 col-lg-6 offset-lg-3">
+
         <input onChange={(ev) => this.handleChangeField('title', ev)} value={title} className="form-control my-3" placeholder="Title"
         />
-        <input onChange={(ev) => this.handleChangeField('file', ev)} value={file} type="file" className="form-control my-3"/>
+       
+        <input type="file" onChange={(ev) => this.handleChangeField('file', ev)} ref={(ref) => { this.uploadInput = ref; }} name="myimage" className="form-control my-3" id="group_image"/>
+        <img id="target" src={this.state.image}/>
         <textarea onChange={(ev) => this.handleChangeField('body', ev)} className="form-control my-3 blogContent" placeholder="Blog Content" value={body}>
         </textarea>
         <input onChange={(ev) => this.handleChangeField('author', ev)} value={author} className="form-control my-3" placeholder="Author"

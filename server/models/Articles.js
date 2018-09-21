@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+var multer = require('multer');
+const router = require('express').Router();
 
 const { Schema } = mongoose;
 
@@ -7,6 +9,8 @@ const ArticlesSchema = new Schema({
   body: String,
   author: String,
   related: String,
+  file:String
+  
 }, { timestamps: true });
 
 ArticlesSchema.methods.toJSON = function() {
@@ -18,7 +22,7 @@ ArticlesSchema.methods.toJSON = function() {
     related: this.related,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
+    file:this.file,
   };
 };
-
 mongoose.model('Articles', ArticlesSchema);

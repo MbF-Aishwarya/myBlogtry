@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const router = require('express').Router();
+var multer = require('multer');
 const Articles = mongoose.model('Articles');
 
 router.post('/', (req, res, next) => {
@@ -30,6 +31,14 @@ router.post('/', (req, res, next) => {
   }
 
   if(!body.body) {
+    return res.status(422).json({
+      errors: {
+        body: 'is required',
+      },
+    });
+  }
+
+  if(!body.file) {
     return res.status(422).json({
       errors: {
         body: 'is required',
@@ -84,6 +93,10 @@ router.patch('/:id', (req, res, next) => {
 
   if(typeof body.related !== 'undefined') {
     req.article.related = body.related;
+  }
+
+  if(typeof body.file !== 'undefined') {
+    req.article.file = body.file;
   }
 
   return req.article.save()
