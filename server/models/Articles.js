@@ -10,7 +10,6 @@ const ArticlesSchema = new Schema({
   author: String,
   related: String,
   file:String
-  
 }, { timestamps: true });
 
 ArticlesSchema.methods.toJSON = function() {
@@ -20,9 +19,9 @@ ArticlesSchema.methods.toJSON = function() {
     body: this.body,
     author: this.author,
     related: this.related,
+    file: this.file,
     createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
-    file:this.file,
+    updatedAt: this.updatedAt
   };
 };
 mongoose.model('Articles', ArticlesSchema);

@@ -6,6 +6,17 @@ const Articles = mongoose.model('Articles');
 router.post('/', (req, res, next) => {
   const { body } = req;
 
+  console.log(req);
+  let imageFile = req.files.file;
+
+  imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.json({file: `public/${req.body.filename}.jpg`});
+    console.log(res.json);
+  });
+
   if(!body.title) {
     return res.status(422).json({
       errors: {

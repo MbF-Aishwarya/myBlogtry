@@ -41,17 +41,22 @@ class Form extends React.Component {
         body,
         author,
         related,
-        file
+        file,
+        body: data
       })
         .then((res) => onSubmit(res.data))
-        .then(() => this.setState({ title: '', body: '', author: '', related: '', file:''}));
+        .then(() => this.setState({ title: '', body: '', author: '', related: '', file:''}))
+        .then(response => {response.json().then(body => {this.setState({ imageURL: `http://localhost:8000/${body.file}` });
+          });
+        });
     } else {
       return axios.patch(`http://localhost:8000/api/articles/${articleToEdit._id}`, {
         title,
         body,
         author,
         related,
-        file
+        file,
+        body: data
         
       })
         .then((res) => onEdit(res.data))
@@ -74,7 +79,7 @@ class Form extends React.Component {
             reader.readAsDataURL(event.target.files[0]);
         }
 
-        const data = new FormData();
+      const data = new FormData();
       data.append('file', this.uploadInput.files[0]);
   }
 
@@ -88,7 +93,7 @@ class Form extends React.Component {
         <input onChange={(ev) => this.handleChangeField('title', ev)} value={title} className="form-control my-3" placeholder="Title"
         />
        
-        <input type="file" onChange={(ev) => this.handleChangeField('file', ev)} ref={(ref) => { this.uploadInput = ref; }} name="myimage" className="form-control my-3" id="group_image"/>
+        <input type="file" onChange={(ev) => this.handleChangeField('file', ev)} ref={ref => {this.uploadInput = ref;}} name="myimage" className="form-control my-3" id="group_image"/>
         <img id="target" src={this.state.image}/>
         <textarea onChange={(ev) => this.handleChangeField('body', ev)} className="form-control my-3 blogContent" placeholder="Blog Content" value={body}>
         </textarea>

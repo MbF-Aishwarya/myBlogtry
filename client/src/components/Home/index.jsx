@@ -10,7 +10,8 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      file:''
+      file:'',
+      imageURL: ''
     }
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -32,7 +33,10 @@ class Home extends React.Component {
     const { onLoad } = this.props;
     axios('http://localhost:8000/api/articles')
       .then((res) => onLoad(res.data));
-
+      /*.then((res) => {res.json().then(body => {this.setState({ imageURL: `` });
+        console.log(imageURL)
+      });
+    });*/
   }
 
   handleDelete(id) {
@@ -70,6 +74,7 @@ class Home extends React.Component {
                     </div>
                     <div className="card-body">
                       {article.file} 
+                     <br />
                       {article.body}
                       <p className="mt-5">Related to: {article.related}</p>
                       <p className="mt-5 text-muted"><b>{article.author}</b> {moment(new Date(article.createdAt)).fromNow()}</p>
