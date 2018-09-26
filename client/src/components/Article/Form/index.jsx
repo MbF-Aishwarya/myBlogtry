@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
-import Imgupload  from '../ImgUpload';
+
 
 class Form extends React.Component {
   constructor(props) {
@@ -12,11 +12,14 @@ class Form extends React.Component {
       body: '',
       author: '',
       related: '',
-      file:''
+      file:'',
+      imageURL: '',
+     
     }
 
     this.handleChangeField = this.handleChangeField.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,9 +34,14 @@ class Form extends React.Component {
     }
   }
 
-  handleSubmit(){
+
+  handleUploadImage(ev) {
+    
+  }
+
+  handleSubmit(ev){
     const { onSubmit, articleToEdit, onEdit } = this.props;
-    const { title, body, author, related, file } = this.state;
+    const { title, body, author, related, file, filename } = this.state;
 
     if(!articleToEdit) {
       return axios.post('http://localhost:8000/api/articles', {
@@ -41,13 +49,12 @@ class Form extends React.Component {
         body,
         author,
         related,
-        file,
-        body: data
+        file
       })
         .then((res) => onSubmit(res.data))
         .then(() => this.setState({ title: '', body: '', author: '', related: '', file:''}))
-        .then(response => {response.json().then(body => {this.setState({ imageURL: `http://localhost:8000/${body.file}` });
-          });
+        .then(response => {response.json().then(body => {this.setState({ imageURL: `` });
+           });
         });
     } else {
       return axios.patch(`http://localhost:8000/api/articles/${articleToEdit._id}`, {
@@ -55,12 +62,24 @@ class Form extends React.Component {
         body,
         author,
         related,
-        file,
-        body: data
-        
+        file
       })
         .then((res) => onEdit(res.data))
         .then(() => this.setState({ title: '', body: '', author: '', related: '', file:''}));
+
+        ev.preventDefault();
+        const data = new FormData();
+        data.append('file', this.uploadInput.files[0]);
+        data.append('filename', this.fileName.value);
+
+        fetch('http://localhost:8000/api/upload', {
+          method: 'POST',
+          body: data,
+        }).then((response) => {
+          response.json().then((body) => {
+            this.setState({ imageURL: `http://localhost:8000/${body.file}` });
+          });
+        });
     }
   }
 
@@ -89,10 +108,8 @@ class Form extends React.Component {
 
     return (
       <div className="col-6 col-lg-6 offset-lg-3">
-
         <input onChange={(ev) => this.handleChangeField('title', ev)} value={title} className="form-control my-3" placeholder="Title"
         />
-       
         <input type="file" onChange={(ev) => this.handleChangeField('file', ev)} ref={ref => {this.uploadInput = ref;}} name="myimage" className="form-control my-3" id="group_image"/>
         <img id="target" src={this.state.image}/>
         <textarea onChange={(ev) => this.handleChangeField('body', ev)} className="form-control my-3 blogContent" placeholder="Blog Content" value={body}>
@@ -101,7 +118,10 @@ class Form extends React.Component {
         />
         <input onChange={(ev) => this.handleChangeField('related', ev)} value={related} className="form-control my-3" placeholder="Related to"/>
         <button onClick={this.handleSubmit} className="btn btn-primary">{articleToEdit ? 'Update' : 'Submit'}</button>
+
+         <img src={this.state.imageURL} alt="img" />
       </div>
+
     )
   }
 }

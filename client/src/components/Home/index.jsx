@@ -4,7 +4,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 
 import { Form } from '../../components/Article';
-import { Imgupload } from '../../components/Article';
+
 
 class Home extends React.Component {
   constructor(props) {
@@ -33,10 +33,7 @@ class Home extends React.Component {
     const { onLoad } = this.props;
     axios('http://localhost:8000/api/articles')
       .then((res) => onLoad(res.data));
-      /*.then((res) => {res.json().then(body => {this.setState({ imageURL: `` });
-        console.log(imageURL)
-      });
-    });*/
+     
   }
 
   handleDelete(id) {
