@@ -6,6 +6,7 @@ const cors = require('cors');
 const errorHandler = require('errorhandler');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
+const multer = require('multer');
 var upload = multer({ dest: '/tmp/'});
 
 

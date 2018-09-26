@@ -19,7 +19,6 @@ class Form extends React.Component {
 
     this.handleChangeField = this.handleChangeField.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,11 +31,6 @@ class Form extends React.Component {
        file: nextProps.articleToEdit.file,
       });
     }
-  }
-
-
-  handleUploadImage(ev) {
-    
   }
 
   handleSubmit(ev){
@@ -53,9 +47,7 @@ class Form extends React.Component {
       })
         .then((res) => onSubmit(res.data))
         .then(() => this.setState({ title: '', body: '', author: '', related: '', file:''}))
-        .then(response => {response.json().then(body => {this.setState({ imageURL: `` });
-           });
-        });
+        
     } else {
       return axios.patch(`http://localhost:8000/api/articles/${articleToEdit._id}`, {
         title,
@@ -79,11 +71,10 @@ class Form extends React.Component {
           response.json().then((body) => {
             this.setState({ imageURL: `http://localhost:8000/${body.file}` });
           });
+          console.log(imageURL);
         });
     }
   }
-
- 
 
   handleChangeField(key, event) {
     this.setState({
@@ -118,8 +109,6 @@ class Form extends React.Component {
         />
         <input onChange={(ev) => this.handleChangeField('related', ev)} value={related} className="form-control my-3" placeholder="Related to"/>
         <button onClick={this.handleSubmit} className="btn btn-primary">{articleToEdit ? 'Update' : 'Submit'}</button>
-
-         <img src={this.state.imageURL} alt="img" />
       </div>
 
     )

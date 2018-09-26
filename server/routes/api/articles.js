@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const router = require('express').Router();
 const Articles = mongoose.model('Articles');
+const multer = require('multer');
 
 router.post('/', (req, res, next) => {
   const { body } = req;
