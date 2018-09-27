@@ -9,7 +9,6 @@ const fileUpload = require('express-fileupload');
 const multer = require('multer');
 var upload = multer({ dest: '/tmp/'});
 
-
 mongoose.promise = global.Promise;
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -18,8 +17,8 @@ const app = express();
 
 app.use(cors());
 app.use(require('morgan')('dev'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb'}));
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'LightBlog', cookie: { maxAge: 100000 }, resave: false, saveUninitialized: false }));
 app.use(fileUpload());
@@ -32,38 +31,16 @@ if(!isProduction) {
 mongoose.connect('mongodb://localhost/lightblog', { useNewUrlParser: true });
 mongoose.set('debug', true);
 
+
 // Add models
 require('./models/Articles');
 // Add routes
 
-app.post('./routes/api/upload', (req, res, next) => {
-  console.log(req);
-  let imageFile = req.files.file;
-
-  imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function(err) {
-    if (err) {
-      return res.status(500).send(err);
-    }
-
-    res.json({file: `public/${req.body.filename}.jpg`});
-  });
-
-})
-
-app.post('/file_upload', upload.single('file'), function(req, res) {
-  var file = __dirname + '/' + req.file.filename;
-  fs.rename(req.file.path, file, function(err) {
-    if (err) {
-      console.log(err);
-      res.send(500);
-    } else {
-      res.json({
-        message: 'File uploaded successfully',
-        filename: req.file.filename
-      });
-    }
-  });
-});  
+//upload.single('file')
+// bodyParser = {
+//   json: {limit: '50mb', extended: true},
+//   urlencoded: {limit: '50mb', extended: true}
+// }
 
 app.use(require('./routes'));
 
@@ -75,8 +52,24 @@ app.use((req, res, next) => {
 
 //image upload
 
-
-
+app.post('/file_upload', function(req, res) {
+  const finalArticle = new Articles(req.body);
+  return finalArticle.save()
+    .then(() => res.json({ article: finalArticle.toJSON() }))
+    .catch(next);
+  // var file = __dirname + '/' + req.file.filename;
+  // fs.rename(req.file.path, file, function(err) {
+  //   if (err) {
+  //     console.log(err);
+  //     res.send(500);
+  //   } else {
+  //     res.json({
+  //       message: 'File uploaded successfully',
+  //       filename: req.file.filename
+  //     });
+  //   }
+  // });
+}); 
 
 if (!isProduction) {
   app.use((err, req, res) => {

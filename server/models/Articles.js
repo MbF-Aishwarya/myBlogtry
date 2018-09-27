@@ -10,7 +10,8 @@ const ArticlesSchema = new Schema({
   author: String,
   related: String,
   file:String,
-  filename:String
+  filename:String,
+  image:String
 }, { timestamps: true });
 
 ArticlesSchema.methods.toJSON = function() {
@@ -22,6 +23,7 @@ ArticlesSchema.methods.toJSON = function() {
     related: this.related,
     file: this.file,
     filename:this.filename,
+    image:this.image,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   };

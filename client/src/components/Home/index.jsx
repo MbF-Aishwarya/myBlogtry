@@ -70,11 +70,15 @@ class Home extends React.Component {
                       {article.title}
                     </div>
                     <div className="card-body">
-                      {article.file} 
-                     <br />
-                      {article.body}
-                      <p className="mt-5">Related to: {article.related}</p>
-                      <p className="mt-5 text-muted"><b>{article.author}</b> {moment(new Date(article.createdAt)).fromNow()}</p>
+                       <div className="blogImage">
+                        <img src={article.image} /> 
+                       </div>
+                        <br />
+                      <div className="card-content">
+                        {article.body}
+                        <p className="mt-5 text-muted"><strong>{article.author}</strong> <span>{moment(new Date(article.createdAt)).fromNow()}</span></p>
+                        <p className="mt-5"><strong>Related to :</strong> {article.related}</p>
+                      </div>
                     </div>
                     <div className="card-footer">
                       <div className="row">

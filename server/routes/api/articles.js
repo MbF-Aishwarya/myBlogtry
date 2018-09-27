@@ -6,37 +6,37 @@ const multer = require('multer');
 router.post('/', (req, res, next) => {
   const { body } = req;
 
-  if(!body.title) {
-    return res.status(422).json({
-      errors: {
-        title: 'is required',
-      },
-    });
-  }
+  // if(!body.title) {
+  //   return res.status(422).json({
+  //     errors: {
+  //       title: 'is required',
+  //     },
+  //   });
+  // }
 
-  if(!body.author) {
-    return res.status(422).json({
-      errors: {
-        author: 'is required',
-      },
-    });
-  }
+  // if(!body.author) {
+  //   return res.status(422).json({
+  //     errors: {
+  //       author: 'is required',
+  //     },
+  //   });
+  // }
 
-  if(!body.related) {
-    return res.status(422).json({
-      errors: {
-        related: 'is required',
-      },
-    });
-  }
+  // if(!body.related) {
+  //   return res.status(422).json({
+  //     errors: {
+  //       related: 'is required',
+  //     },
+  //   });
+  // }
 
-  if(!body.body) {
-    return res.status(422).json({
-      errors: {
-        body: 'is required',
-      },
-    });
-  }
+  // if(!body.body) {
+  //   return res.status(422).json({
+  //     errors: {
+  //       body: 'is required',
+  //     },
+  //   });
+  // }
 
   const finalArticle = new Articles(body);
   return finalArticle.save()

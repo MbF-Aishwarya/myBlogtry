@@ -49,3 +49,45 @@ img.bg{
 	display:inline-flex;
 	margin-right:20px;
 }
+.showImage{
+	img{
+		max-width: 300px;
+    	max-height: 300px;
+	}
+}
+.blogImage{
+	width:100%;
+	text-align: center;
+	img{
+		height:200px;
+		width: 100%;
+		object-fit: cover;
+    	object-position: center;
+	}
+}
+.card-body{
+	padding: 0px;
+}
+.card-content{
+	padding:20px;
+	strong{
+		font-weight: 800;
+	    font-size: 16px;
+	    color: #413636;
+	}
+	span{
+		font-size:12px;
+	}
+}
+.btn-primary{
+	background-color: #606468;
+    border-color: #4d5053;
+    &:hover{
+    	background-color:black;
+    	border-color:black;
+    }
+}
+.btn-danger{
+	background-color: #a73540;
+    border-color: #a74a53;
+}
